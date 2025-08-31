@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname)));
 
 // API route
 app.get('/', (req, res) => {
-    res.json({ message: 'Hello from Node.js ! Lets learn DevOps' });
+    res.json({ message: 'New changes to production' });
 });
 app.get('/api', (req, res) => {
     res.json({ message: 'Hello from Node.js backend API!' });
