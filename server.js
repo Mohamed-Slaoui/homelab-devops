@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname)));
 
 // API route
 app.get('/', (req, res) => {
-    res.json({ message: 'Testing Backend' });
+    res.json({ message: 'Testing Github Webhooks' });
 });
 app.get('/api', (req, res) => {
     res.json({ message: 'Hello from Node.js backend API!' });
