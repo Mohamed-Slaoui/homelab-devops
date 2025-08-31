@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_DIR = '/home/ubuntu/homelab-devops'
         IMAGE_NAME = 'myapp:latest'
         CONTAINER_NAME = 'myapp-container'
     }
@@ -10,13 +9,15 @@ pipeline {
     stages {
         stage('Pull latest code') {
             steps {
+                // Jenkins will clone the repo into its workspace
                 git branch: 'main', url: 'https://github.com/Mohamed-Slaoui/homelab-devops'
             }
         }
 
         stage('Build Docker image') {
             steps {
-                sh "docker build -t $IMAGE_NAME $PROJECT_DIR"
+                // Build Docker image from the workspace (repo) directory
+                sh "docker build -t $IMAGE_NAME ."
             }
         }
 
