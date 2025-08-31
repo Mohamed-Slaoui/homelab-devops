@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Inspiration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-pulse:hover {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-900 to-purple-800 min-h-screen flex items-center justify-center p-4">
+    <div
+        class="max-w-2xl w-full bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/20">
+        <div class="p-8 md:p-12 text-center">
+            <i class="fas fa-quote-left text-white/30 text-4xl mb-4"></i>
+
+            <div id="quote-container" class="min-h-40 flex flex-col justify-center">
+                <p id="quote-text" class="text-white text-xl md:text-2xl font-medium leading-relaxed fade-in">
+                    "The only way to do great work is to love what you do."
+                </p>
+                <p id="quote-author" class="text-white/70 mt-4 italic fade-in">
+                    — Steve Jobs
+                </p>
+            </div>
+
+            <button id="new-quote-btn"
+                class="btn-pulse mt-10 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full text-white font-medium transition-all duration-300 flex items-center mx-auto">
+                <i class="fas fa-sync-alt mr-2"></i>
+                New Inspiration
+            </button>
+        </div>
+
+        <div class="bg-black/10 p-4 text-center text-white/50 text-sm">
+            <p>Refresh your mind with wisdom</p>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            {
+                text: "The only way to do great work is to love what you do.",
+                author: "Steve Jobs"
+            },
+            {
+                text: "Life is what happens when you're busy making other plans.",
+                author: "John Lennon"
+            },
+            {
+                text: "The journey of a thousand miles begins with one step.",
+                author: "Lao Tzu"
+            },
+            {
+                text: "That which does not kill us makes us stronger.",
+                author: "Friedrich Nietzsche"
+            },
+            {
+                text: "Be the change that you wish to see in the world.",
+                author: "Mahatma Gandhi"
+            },
+            {
+                text: "It is never too late to be what you might have been.",
+                author: "George Eliot"
+            },
+            {
+                text: "Everything you can imagine is real.",
+                author: "Pablo Picasso"
+            },
+            {
+                text: "Whatever you are, be a good one.",
+                author: "Abraham Lincoln"
+            }
+        ];
+
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const newQuoteBtn = document.getElementById('new-quote-btn');
+        const quoteContainer = document.getElementById('quote-container');
+
+        function getRandomQuote() {
+            return quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        function displayNewQuote() {
+            quoteContainer.innerHTML = `
+        <div class="flex justify-center items-center h-40">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+        </div>
+    `;
+
+            fetch('/api/quotes')
+                .then(res => res.json())
+                .then(data => {
+                    const quote = data[Math.floor(Math.random() * data.length)];
+                    quoteText.textContent = `"${quote.text}"`;
+                    quoteAuthor.textContent = `— ${quote.author}`;
+
+                    quoteText.classList.remove('fade-in');
+                    quoteAuthor.classList.remove('fade-in');
+                    void quoteText.offsetWidth;
+                    quoteText.classList.add('fade-in');
+                    quoteAuthor.classList.add('fade-in');
+                })
+                .catch(err => console.error(err));
+        }
+
+
+        // Initial quote
+        displayNewQuote();
+
+        // Button click event
+        newQuoteBtn.addEventListener('click', displayNewQuote);
+
+        // Also change quote on spacebar press
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                displayNewQuote();
+            }
+        });
+    </script>
+</body>
+
+</html>
